@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.repository.EventoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class QueryService {
     @Autowired
@@ -13,6 +15,10 @@ public class QueryService {
 
     public Evento getEventoById(String id) {
         return eventoRepository.findById(id).orElse(null);
+    }
+
+    public List<Evento> getEventos() {
+        return eventoRepository.findAll();
     }
 
     //Estos dos se tienen que eliminar

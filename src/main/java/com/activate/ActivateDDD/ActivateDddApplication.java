@@ -16,11 +16,16 @@ public class ActivateDddApplication {
 	public static void main(String[] args) {
 
 		//SpringApplication.run(ActivateDddApplication.class, args);
+		System.out.println("Iniciando aplicación");
 		ConfigurableApplicationContext context = SpringApplication.run(ActivateDddApplication.class, args);
+		System.out.println("Aplicación iniciada");
+
 		QueryService queryService = context.getBean(QueryService.class);
+
+		System.out.println("Creando evento de prueba");
 		Evento evento = new Evento();
 
-		evento.setNombre("Evento de prueba");
+		evento.setNombre("Evento de prueba2");
 		evento.setAforoMaximo(100);
 		evento.setDuracion(2);
 		evento.setDescripcion("Evento de prueba");
@@ -33,8 +38,11 @@ public class ActivateDddApplication {
 		evento.setParticipantes(List.of(new Participante(234l,"Participante de prueba"), new Participante(235l,"Participante de prueba 2")));
 		evento.setEvaluaciones(List.of(new Evaluacion(234l,"muy bueno", 5, "pepe"), new Evaluacion(235l,"muy malo", 1, "juan")));
 
+
 		Evento eventoCreado = queryService.createEvento(evento);
 		System.out.println("Evento creado: " + queryService.getEventoById(eventoCreado.getId()));
+
+		queryService.getEventos().forEach(System.out::println);
 	}
 
 }
