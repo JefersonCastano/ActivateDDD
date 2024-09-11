@@ -8,5 +8,4 @@ import lombok.Data;
 public class Ubicacion {
     private double latitud;
     private double longitud;
-
 }
