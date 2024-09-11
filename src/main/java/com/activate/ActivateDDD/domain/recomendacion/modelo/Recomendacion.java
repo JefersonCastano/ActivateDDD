@@ -53,14 +53,6 @@ public class Recomendacion {
 
     }
 
-    public void eliminarEmparejamiento(Usuario usuario,EventoInfo evento){
-        if(emparejamientos.containsKey(usuario.getId())){
-            ArrayList<EventoInfo> eventos = emparejamientos.get(usuario.getId());
-            eventos.remove(evento);
-            emparejamientos.replace(usuario.getId(), eventos);
-        }
-    }
-
     private boolean estaCerca(Ubicacion A, Ubicacion B) {
         int distancia = (int) Math.sqrt(Math.pow(A.getLatitud() - B.getLatitud(), 2) + Math.pow(A.getLongitud() - B.getLongitud(), 2));
         return distancia <= UMBRAL_CERCANIA;
