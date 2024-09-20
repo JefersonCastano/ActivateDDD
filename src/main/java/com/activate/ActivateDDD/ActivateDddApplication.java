@@ -7,7 +7,7 @@ import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.s
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Interes;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Ubicacion;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Usuario;
-import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.repository.*;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.repository.UsuarioRepository;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.activate.ActivateDDD")
 public class ActivateDddApplication {
 
 	public static void main(String[] args) {
@@ -42,11 +42,15 @@ public class ActivateDddApplication {
 		evento.setDuracion(2);
 		evento.setDescripcion("Evento de prueba");
 		evento.setFecha(LocalDateTime.now());
-		evento.setUbicacion(new Ubicacion(234f,234f));
+		evento.setUbicacion(new com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Ubicacion(234f,234f));
 		evento.setEstado(Estado.ABIERTO);
 		evento.setTipo(TipoEvento.PRIVADO);
 		evento.setOrganizador(new Organizador(234l,"Organizador de prueba"));
-		evento.setIntereses(Set.of(Interes.ARTE,Interes.CIENCIA));
+		evento.setIntereses(
+				Set.of(
+						com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Interes.ARTE,
+						com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Interes.CIENCIA)
+		);
 		evento.setParticipantes(List.of(new Participante(234l,"Participante de prueba"), new Participante(235l,"Participante de prueba 2")));
 		evento.setEvaluaciones(List.of(new Evaluacion(234l,"muy bueno", 5, "pepe"), new Evaluacion(235l,"muy malo", 1, "juan")));
 
