@@ -9,6 +9,8 @@ import lombok.ToString;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @Table
@@ -28,5 +30,26 @@ public class Evaluacion {
     @JoinColumn(name = "evento_id", nullable = false)
     @ToString.Exclude
     private EventoCommand evento;
+
+    @PrePersist
+    public void prePersist() {
+        if (evento != null) {
+            evento.setLastModifiedDate(LocalDateTime.now());
+        }
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        if (evento != null) {
+            evento.setLastModifiedDate(LocalDateTime.now());
+        }
+    }
+
+    @PreRemove
+    public void preRemove() {
+        if (evento != null) {
+            evento.setLastModifiedDate(LocalDateTime.now());
+        }
+    }
 
 }

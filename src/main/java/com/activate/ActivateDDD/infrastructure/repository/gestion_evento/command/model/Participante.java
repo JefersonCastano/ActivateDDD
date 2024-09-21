@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Data
@@ -30,5 +31,24 @@ public class Participante {
     @ToString.Exclude
     private EventoCommand evento;
 
+    @PrePersist
+    public void prePersist() {
+        if (evento != null) {
+            evento.setLastModifiedDate(LocalDateTime.now());
+        }
+    }
 
+    @PreUpdate
+    public void preUpdate() {
+        if (evento != null) {
+            evento.setLastModifiedDate(LocalDateTime.now());
+        }
+    }
+
+    @PreRemove
+    public void preRemove() {
+        if (evento != null) {
+            evento.setLastModifiedDate(LocalDateTime.now());
+        }
+    }
 }

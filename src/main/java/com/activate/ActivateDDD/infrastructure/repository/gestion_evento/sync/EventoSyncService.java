@@ -1,43 +1,46 @@
 package com.activate.ActivateDDD.infrastructure.repository.gestion_evento.sync;
 
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.EventoCommand;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.repository.EventoCommandRepository;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.*;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
+@Service
 public class EventoSyncService {
 
-    Date lastSyncDate = new Date();
+    LocalDateTime lastSyncDate = LocalDateTime.now();
 
     @Autowired
     EventoCommandRepository eventoCommandRepository;
 
     @Autowired
-    ParticipanteCommandRepository participanteCommandRepository;
-
-    @Autowired
-    EvaluacionCommandRepository evaluacionCommandRepository;
+    UsuarioRepository usuarioRepository;
 
     @Autowired
     private MongoOperations mongoOps;
 
+    @Transactional
     public void sync() {
-        Date newSyncDate = new Date();
         updateEvento();
-        updateIntereses();
-        updateParticipantes();
-        updateEvaluaciones();
-        lastSyncDate = newSyncDate;
+        lastSyncDate = LocalDateTime.now();
     }
 
     private void updateEvento() {
-        List<EventoCommand> modifiedEventos = eventoCommandRepository.findAllByLastModifiedDateAfter(lastSyncDate);
-
+        List<EventoCommand> modifiedEventos = getEventosASincronizar();
+        System.out.println("Eventos a modificar: " + modifiedEventos.size() + " Hora: " + lastSyncDate);
         for(EventoCommand evento: modifiedEventos) {
             Query query = new Query(Criteria.where("id").is(evento.getId().toString()));
             Update update = new Update();
@@ -50,12 +53,39 @@ public class EventoSyncService {
             update.set("ubicacion", evento.getUbicacion()); // Ubicacion: si es un objeto embebido, se actualizará correctamente.
             update.set("estado", evento.getEstado()); // Enum Estado
             update.set("tipo", evento.getTipo()); // Enum TipoEvento
-            update.set("organizador", evento.getOrganizador()); // Objeto Organizador
+            update.set("organizador", getOrganizador(evento.getOrganizador())); // Objeto Organizador
+            update.set("intereses", evento.getIntereses()); // Set<Interes>
+            update.set("participantes", getPaticipantes(evento.getParticipantes())); // List<Participante>
+            update.set("evaluaciones", getEvaluaciones(evento.getEvaluaciones())); // List<Evaluacion>
 
             mongoOps.findAndModify(query, update, FindAndModifyOptions.options().returnNew(true).upsert(true), Evento.class);
+            System.out.println("Evento " + evento.getId().toString() + " actualizado");
         }
     }
 
+    private List<EventoCommand> getEventosASincronizar() {
+        return eventoCommandRepository.findAllByLastModifiedDateAfter(lastSyncDate);
+    }
+
+    private Organizador getOrganizador(Long id) {
+        String nombre = usuarioRepository.findById(id).get().getNombre();
+        return new Organizador(id, nombre);
+    }
+
+    private List<Participante> getPaticipantes(List<com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Participante> participantesCommand){
+        return participantesCommand.stream().map(participanteCommand -> new Participante(participanteCommand.getId(), participanteCommand.getUsuario().getNombre())).collect(Collectors.toList());
+    }
+
+    private List<Evaluacion> getEvaluaciones(List<com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Evaluacion> evaluacionesCommand){
+        return evaluacionesCommand.stream()
+                .map(evaluacionCommand ->
+                        new Evaluacion(evaluacionCommand.getId(),
+                                evaluacionCommand.getComentario(),
+                                evaluacionCommand.getPuntuacion(),
+                                usuarioRepository.findById(evaluacionCommand.getAutor()).get().getNombre()))
+                .collect(Collectors.toList());
+    }
+/*
     private void updateIntereses() {
         List<InteresCommand> modifiedIntereses = InteresCommandRepository.findAllByLastModifiedDateAfter(lastSyncDate);
 
@@ -120,5 +150,5 @@ public class EventoSyncService {
             Update update = new Update().addToSet("comments.$.reactions", mongoReaction);
             mongoOps.findAndModify(query, update, FindAndModifyOptions.options().upsert(true), Post.class);
         }
-    }
+    }*/
 }

@@ -7,6 +7,7 @@ import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.*;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.service.QueryService;
 
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.sync.EventoSyncService;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Interes;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Ubicacion;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Usuario;
@@ -20,6 +21,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static java.lang.Thread.sleep;
 
 
 @SpringBootApplication(scanBasePackages = "com.activate.ActivateDDD")
@@ -89,8 +92,13 @@ public class ActivateDddApplication {
 		}
 
 		ServicePrueba servicePrueba = context.getBean(ServicePrueba.class);
-		servicePrueba.prueba();
 
+		servicePrueba.prueba();
+		servicePrueba.pruebaAddAndDeleteParticipante();
+		servicePrueba.pruebaAddAndDeleteEvaluaciones();
+
+		EventoSyncService eventoSyncService = context.getBean(EventoSyncService.class);
+		eventoSyncService.sync();
 
 	}
 }

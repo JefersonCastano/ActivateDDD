@@ -11,10 +11,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -31,6 +28,7 @@ public class EventoCommand {
     private String nombre;
     private String descripcion;
     private LocalDateTime fecha;
+    private LocalDateTime lastModifiedDate;
 
     @Embedded
     private Ubicacion ubicacion;
@@ -58,4 +56,19 @@ public class EventoCommand {
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     //@Fetch(FetchMode.JOIN)
     private List<Evaluacion> evaluaciones = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        this.lastModifiedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void preUpdate() {
+        this.lastModifiedDate = LocalDateTime.now();
+    }
+
+    @PreRemove
+    protected void onDelete() {
+        this.lastModifiedDate = LocalDateTime.now();
+    }
 }
