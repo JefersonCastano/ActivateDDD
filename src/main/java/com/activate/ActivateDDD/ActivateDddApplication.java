@@ -1,11 +1,7 @@
 package com.activate.ActivateDDD;
 
-
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.ServicePrueba;
-import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.EventoCommand;
-import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.repository.EventoCommandRepository;
-import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.*;
-import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.service.QueryService;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.repository.EventoRepository;
 
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.sync.EventoSyncService;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Interes;
@@ -13,17 +9,11 @@ import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Usuario;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.repository.UsuarioRepository;
 
-import jakarta.transaction.Transactional;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-
-import java.time.LocalDateTime;
 import java.util.*;
-
-import static java.lang.Thread.sleep;
-
 
 @SpringBootApplication(scanBasePackages = "com.activate.ActivateDDD")
 public class ActivateDddApplication {
@@ -36,35 +26,6 @@ public class ActivateDddApplication {
 		System.out.println("Iniciando aplicación");
 		ConfigurableApplicationContext context = SpringApplication.run(ActivateDddApplication.class, args);
 		System.out.println("Aplicación iniciada");
-		/*
-		QueryService queryService = context.getBean(QueryService.class);
-
-		System.out.println("Creando evento de prueba");
-		Evento evento = new Evento();
-
-		evento.setNombre("Evento de prueba2");
-		evento.setAforoMaximo(100);
-		evento.setDuracion(2);
-		evento.setDescripcion("Evento de prueba");
-		evento.setFecha(LocalDateTime.now());
-		evento.setUbicacion(new com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Ubicacion(234f,234f));
-		evento.setEstado(Estado.ABIERTO);
-		evento.setTipo(TipoEvento.PRIVADO);
-		evento.setOrganizador(new Organizador(234l,"Organizador de prueba"));
-		evento.setIntereses(
-				Set.of(
-						com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Interes.ARTE,
-						com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Interes.CIENCIA)
-		);
-		evento.setParticipantes(List.of(new Participante(234l,"Participante de prueba"), new Participante(235l,"Participante de prueba 2")));
-		evento.setEvaluaciones(List.of(new Evaluacion(234l,"muy bueno", 5, "pepe"), new Evaluacion(235l,"muy malo", 1, "juan")));
-
-
-		Evento eventoCreado = queryService.createEvento(evento);
-		System.out.println("Evento creado: " + queryService.getEventoById(eventoCreado.getId()));
-
-		queryService.getEventos().forEach(System.out::println);
-		*/
 
 		//Creacion Usuario
 
@@ -100,5 +61,7 @@ public class ActivateDddApplication {
 		EventoSyncService eventoSyncService = context.getBean(EventoSyncService.class);
 		eventoSyncService.sync();
 
+		EventoRepository eventoRepository = context.getBean(EventoRepository.class);
+		eventoRepository.findAll().forEach(System.out::println);
 	}
 }
