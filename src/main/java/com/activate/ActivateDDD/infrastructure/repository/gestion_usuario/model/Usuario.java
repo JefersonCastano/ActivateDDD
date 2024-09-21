@@ -1,11 +1,13 @@
 package com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model;
 
 
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Participante;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -31,5 +33,8 @@ public class Usuario {
 
     @Embedded
     private Ubicacion ubicacion;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participante> participantes;
 
 }

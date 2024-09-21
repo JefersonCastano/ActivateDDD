@@ -31,7 +31,7 @@ public class ActivateDddApplication {
 		System.out.println("Iniciando aplicación");
 		ConfigurableApplicationContext context = SpringApplication.run(ActivateDddApplication.class, args);
 		System.out.println("Aplicación iniciada");
-
+		/*
 		QueryService queryService = context.getBean(QueryService.class);
 
 		System.out.println("Creando evento de prueba");
@@ -59,7 +59,7 @@ public class ActivateDddApplication {
 		System.out.println("Evento creado: " + queryService.getEventoById(eventoCreado.getId()));
 
 		queryService.getEventos().forEach(System.out::println);
-
+		*/
 
 		//Creacion Usuario
 
