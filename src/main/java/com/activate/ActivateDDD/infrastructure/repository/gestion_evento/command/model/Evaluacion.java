@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Data
 @Entity
@@ -23,6 +26,7 @@ public class Evaluacion {
 
     @ManyToOne
     @JoinColumn(name = "evento_id", nullable = false)
+    @ToString.Exclude
     private EventoCommand evento;
 
 }

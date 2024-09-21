@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 
@@ -21,10 +22,12 @@ public class Participante {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @ToString.Exclude
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "evento_id")
+    @ToString.Exclude
     private EventoCommand evento;
 
 

@@ -1,15 +1,18 @@
 package com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model;
 
-import com.activate.ActivateDDD.domain.commons.Estado;
-import com.activate.ActivateDDD.domain.commons.TipoEvento;
-import com.activate.ActivateDDD.domain.commons.Ubicacion;
+
+
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Interes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -45,11 +48,14 @@ public class EventoCommand {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "evento_intereses", joinColumns = @JoinColumn(name = "evento_id"))
     @Column(name = "interes")
-    private Set<Interes> intereses;
+    //@Fetch(FetchMode.JOIN)
+    private Set<Interes> intereses = new HashSet<>();
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Participante> participantes ;
+    //@Fetch(FetchMode.JOIN)
+    private List<Participante> participantes = new ArrayList<>();
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Evaluacion> evaluaciones ;
+    //@Fetch(FetchMode.JOIN)
+    private List<Evaluacion> evaluaciones = new ArrayList<>();
 }

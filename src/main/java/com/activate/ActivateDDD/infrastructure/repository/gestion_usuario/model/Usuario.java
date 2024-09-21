@@ -5,6 +5,8 @@ import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,12 +31,14 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "usuario_intereses", joinColumns = @JoinColumn(name = "usuario_id"))
     @Column(name = "interes")
+    @Fetch(FetchMode.JOIN)
     private Set<Interes> intereses;
 
     @Embedded
     private Ubicacion ubicacion;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.JOIN)
     private List<Participante> participantes;
 
 }
