@@ -82,6 +82,7 @@ public class ServicePrueba {
         eventoSyncService.sync();
     }
 
+    @Transactional
     public void pruebaAddAndDeleteParticipante(){
 
         EventoCommand eventoCommand = new EventoCommand();
@@ -120,6 +121,7 @@ public class ServicePrueba {
     }
 
 
+    @Transactional
     public void pruebaAddAndDeleteEvaluaciones(){
 
         EventoCommand eventoCommand = new EventoCommand();
