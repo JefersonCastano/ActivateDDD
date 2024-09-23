@@ -8,6 +8,7 @@ class ActivateDddApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
