@@ -5,12 +5,10 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 
+@Getter
 public class Participante {
-    @Getter
     private Long id;
-    @Getter
     private Usuario usuario;
-    @Getter
     private ArrayList<EventoInfo> eventosParticipados;
 
     public Participante(Long id, Usuario usuario) {

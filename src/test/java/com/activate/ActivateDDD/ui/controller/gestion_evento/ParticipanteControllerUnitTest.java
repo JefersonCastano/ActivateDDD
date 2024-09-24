@@ -32,10 +32,7 @@ class ParticipanteControllerUnitTest {
         Long idEvento = 1L;
         Long idParticipante = 1L;
 
-        //Llamada al método a probar
         participanteController.estaDisponible(idEvento, idParticipante);
-
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(participanteServicio).estaDisponible(eq(idEvento), eq(idParticipante));
     }
 
@@ -43,10 +40,7 @@ class ParticipanteControllerUnitTest {
     void testObtenerEventosParticipante() {
         Long idParticipante = 1L;
 
-        //Llamada al método a probar
         participanteController.obtenerEventosParticipante(idParticipante);
-
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(participanteServicio).obtenerEventosParticipante(eq(idParticipante));
     }
 }

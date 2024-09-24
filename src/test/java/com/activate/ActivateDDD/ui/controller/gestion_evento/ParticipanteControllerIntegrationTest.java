@@ -1,51 +1,72 @@
 package com.activate.ActivateDDD.ui.controller.gestion_evento;
 
 import com.activate.ActivateDDD.application.service.gestion_evento.ParticipanteServicio;
+import com.activate.ActivateDDD.domain.commons.Estado;
+import com.activate.ActivateDDD.domain.commons.Interes;
+import com.activate.ActivateDDD.domain.commons.TipoEvento;
+import com.activate.ActivateDDD.domain.commons.Ubicacion;
+import com.activate.ActivateDDD.domain.gestion_evento.modelo.EventoInfo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 
-@WebMvcTest(ParticipanteController.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
+
+@SpringBootTest
 class ParticipanteControllerIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private ParticipanteController participanteController;
 
     @Mock
     private ParticipanteServicio participanteServicio;
 
-    @Test
-    void testEstaDisponible() throws Exception {
-        Long idEvento = 1L;
-        Long idParticipante = 1L;
+    private Long idEvento;
+    private Long idParticipante;
+    private ArrayList<EventoInfo> eventos;
+    private LocalDateTime fecha;
+    private Ubicacion ubicacion;
+    private HashSet<Interes> intereses;
 
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(participanteServicio).estaDisponible(eq(idEvento), eq(idParticipante));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/participantes/disponibilidad")
-                .param("idEvento", "1")
-                .param("idParticipante", "1"))
-                .andExpect(status().isOk());
+    @BeforeEach
+    void setUp() {
+        idEvento = 1L;
+        idParticipante = 1L;
+        fecha = LocalDateTime.now();
+        ubicacion = new Ubicacion(40L, -3L);
+        intereses = new HashSet<>();
+        intereses.add(Interes.CINE);
+        intereses.add(Interes.MUSICA);
+        intereses.add(Interes.POLITICA);
+        eventos = new ArrayList<>();
+        eventos.add(new EventoInfo(1L, 10, 60, "Evento1", "Descripcion", fecha, ubicacion, Estado.ABIERTO, TipoEvento.PUBLICO, "Juan", intereses));
     }
 
     @Test
-    void testObtenerEventosParticipante() throws Exception {
-        Long idParticipante = 1L;
+    void testEstaDisponible() {
+        when(participanteServicio.estaDisponible(idEvento, idParticipante)).thenReturn(true);
 
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(participanteServicio).obtenerEventosParticipante(eq(idParticipante));
+        boolean disponible = participanteController.estaDisponible(idEvento, idParticipante);
 
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/participantes/eventos")
-                .param("idParticipante", "1"))
-                .andExpect(status().isOk());
+        assertTrue(disponible);
+        verify(participanteServicio).estaDisponible(idEvento, idParticipante);
+    }
+
+    @Test
+    void testObtenerEventosParticipante() {
+        when(participanteServicio.obtenerEventosParticipante(idParticipante)).thenReturn(eventos);
+
+        ArrayList<EventoInfo> resultado = participanteController.obtenerEventosParticipante(idParticipante);
+
+        assertEquals(eventos, resultado);
+        verify(participanteServicio).obtenerEventosParticipante(idParticipante);
     }
 }

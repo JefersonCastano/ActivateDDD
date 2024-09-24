@@ -3,112 +3,102 @@ package com.activate.ActivateDDD.ui.controller.gestion_usuario;
 import com.activate.ActivateDDD.application.service.gestion_usuario.GestionUsuarioServicio;
 import com.activate.ActivateDDD.domain.commons.Interes;
 import com.activate.ActivateDDD.domain.commons.Ubicacion;
+import com.activate.ActivateDDD.domain.gestion_usuario.modelo.Usuario;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@WebMvcTest(GestionUsuarioController.class)
+@SpringBootTest
 class GestionUsuarioControllerIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private GestionUsuarioController gestionUsuarioController;
 
     @MockBean
     private GestionUsuarioServicio gestionUsuarioServicio;
 
+    private String nombre;
+    private int edad;
+    private String email;
+    private HashSet<Interes> intereses;
+    private Long latitud;
+    private Long longitud;
+    private Long id;
+    private Ubicacion ubicacion;
+    private Usuario usuario;
+    private ArrayList<Usuario> usuarios;
+
+    @BeforeEach
+    void setUp() throws Exception {
+        nombre = "Juan";
+        edad = 20;
+        email = "juan@gmail.com";
+        intereses = new HashSet<>();
+        intereses.add(Interes.MUSICA);
+        latitud = 40L;
+        longitud = -3L;
+        id = 1L;
+        ubicacion = new Ubicacion(latitud, longitud);
+        usuario = new Usuario(id, nombre, edad, email, intereses, ubicacion);
+        usuarios = new ArrayList<>();
+        usuarios.add(usuario);
+    }
+
     @Test
     void testCrearUsuario() throws Exception {
-        String nombre = "Juan";
-        int edad = 20;
-        String email = "juan@gmail.com";
-        HashSet<Interes> intereses = new HashSet<>();
-        intereses.add(Interes.MUSICA);
-        Long latitud = 40L;
-        Long longitud = -3L;
+        gestionUsuarioController.crearUsuario(nombre, edad, email, intereses, latitud, longitud);
+        verify(gestionUsuarioServicio).crearUsuario(nombre, edad, email, intereses, ubicacion);
+    }
 
-        //configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionUsuarioServicio).crearUsuario(eq(nombre), eq(edad), eq(email), eq(intereses), any(Ubicacion.class));
+    @Test
+    void testObtenerUsuario() {
+        when(gestionUsuarioServicio.obtenerUsuario(id)).thenReturn(usuario);
+        Usuario result = gestionUsuarioController.obtenerUsuario(id);
+        assertNotNull(result);
+        assertEquals(usuario, result);
+        verify(gestionUsuarioServicio).obtenerUsuario(id);
+    }
 
-        //realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/usuarios")
-                .param("nombre", nombre)
-                .param("edad", String.valueOf(edad))
-                .param("email", email)
-                .param("intereses", "MUSICA")
-                .param("latitud", String.valueOf(latitud))
-                .param("longitud", String.valueOf(longitud)))
-                .andExpect(status().isOk()
-        );
+    @Test
+    void testObtenerUsuarios() {
+        when(gestionUsuarioServicio.obtenerUsuarios()).thenReturn(usuarios);
+        ArrayList<Usuario> result = gestionUsuarioController.obtenerUsuarios();
+        assertNotNull(result);
+        assertEquals(usuarios, result);
+        verify(gestionUsuarioServicio).obtenerUsuarios();
     }
 
     @Test
     void testEditarPerfil() throws Exception {
-        Long id = 1L;
-        String nombre = "Juan";
-        int edad = 20;
-        String email = "juan@gmail.com";
-
-        //configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionUsuarioServicio).editarPerfil(eq(id), eq(nombre), eq(edad), eq(email));
-
-        //realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/usuarios/1/perfil")
-                .param("nombre", nombre)
-                .param("edad", String.valueOf(edad))
-                .param("email", email))
-                .andExpect(status().isOk());
+        gestionUsuarioController.editarPerfil(id, nombre, edad, email);
+        verify(gestionUsuarioServicio).editarPerfil(id, nombre, edad, email);
     }
 
     @Test
-    void testAgregarInteres() throws Exception {
-        Long id = 1L;
-        Interes interes = Interes.MUSICA;
-
-        //configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionUsuarioServicio).agregarInteres(eq(id), eq(interes));
-
-        //realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/usuarios/1/intereses")
-                .param("interes", "MUSICA"))
-                .andExpect(status().isOk());
+    void testAgregarInteres() {
+        gestionUsuarioController.agregarInteres(id, Interes.MUSICA);
+        verify(gestionUsuarioServicio).agregarInteres(id, Interes.MUSICA);
     }
 
     @Test
     void testActualizarUbicacion() throws Exception {
-        Long id = 1L;
-        Ubicacion ubicacion = new Ubicacion(40L, -3L);
-
-        //configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionUsuarioServicio).actualizarUbicacion(eq(id), eq(ubicacion));
-
-        //realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/usuarios/1/ubicacion")
-                .param("latitud", "40")
-                .param("longitud", "-3"))
-                .andExpect(status().isOk());
+        gestionUsuarioController.actualizarUbicacion(id, ubicacion);
+        verify(gestionUsuarioServicio).actualizarUbicacion(id, ubicacion);
     }
 
     @Test
-    void testEliminarInteres() throws Exception {
-        Long id = 1L;
-        Interes interes = Interes.MUSICA;
-
-        //configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionUsuarioServicio).eliminarInteres(eq(id), eq(interes));
-
-        //realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/usuarios/1/intereses/eliminar")
-                .param("interes", "MUSICA"))
-                .andExpect(status().isOk());
+    void testEliminarInteres() {
+        gestionUsuarioController.eliminarInteres(id, Interes.MUSICA);
+        verify(gestionUsuarioServicio).eliminarInteres(id, Interes.MUSICA);
     }
 }

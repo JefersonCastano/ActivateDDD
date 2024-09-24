@@ -3,9 +3,11 @@ package com.activate.ActivateDDD.ui.controller.gestion_evento;
 import com.activate.ActivateDDD.application.service.gestion_evento.GestionEventoServicio;
 import com.activate.ActivateDDD.domain.commons.Estado;
 import com.activate.ActivateDDD.domain.commons.TipoEvento;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -13,117 +15,79 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(GestionEventoController.class)
+@SpringBootTest
 class GestionEventoControllerIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private GestionEventoController gestionEventoController;
 
     @MockBean
     private GestionEventoServicio gestionEventoServicio;
 
-    @Test
-    void testActualizarEstado() throws Exception{
-        Long idEvento = 1L;
-        Estado estado = Estado.ABIERTO;
+    private Long idEvento;
+    private Estado estado;
+    private TipoEvento tipo;
+    private int aforoMaximo;
+    private LocalDateTime fecha;
+    private String comentario;
+    private int puntuacion;
+    private Long idParticipante;
 
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionEventoServicio).actualizarEstado(eq(idEvento), eq(estado));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/eventos/1/estado")
-                .param("estado", "ABIERTO"))
-                .andExpect(status().isOk());
+    @BeforeEach
+    void setUp() {
+        idEvento = 1L;
+        estado = Estado.ABIERTO;
+        tipo = TipoEvento.PUBLICO;
+        aforoMaximo = 100;
+        fecha = LocalDateTime.now();
+        comentario = "Excelente evento";
+        puntuacion = 5;
+        idParticipante = 1L;
     }
 
     @Test
-    void testActualizarTipo() throws Exception{
-        Long idEvento = 1L;
-        TipoEvento tipo = TipoEvento.PUBLICO;
-
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionEventoServicio).actualizarTipo(eq(idEvento), eq(tipo));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/eventos/1/tipo")
-                .param("tipo", "PUBLICO"))
-                .andExpect(status().isOk());
+    void testActualizarEstado() {
+        gestionEventoController.actualizarEstado(idEvento, estado);
+        verify(gestionEventoServicio).actualizarEstado(idEvento, estado);
     }
 
     @Test
-    void testActualizarAforoMaximo() throws Exception{
-        Long idEvento = 1L;
-        int aforoMaximo = 100;
-
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionEventoServicio).actualizarAforoMaximo(eq(idEvento), eq(aforoMaximo));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/eventos/1/aforo")
-                .param("aforoMaximo", "100"))
-                .andExpect(status().isOk());
+    void testActualizarTipo() {
+        gestionEventoController.actualizarTipo(idEvento, tipo);
+        verify(gestionEventoServicio).actualizarTipo(idEvento, tipo);
     }
 
     @Test
-    void testActualizarFecha() throws Exception{
-        Long idEvento = 1L;
-        LocalDateTime fecha = LocalDateTime.now();
-
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionEventoServicio).actualizarFecha(eq(idEvento), eq(fecha));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/eventos/1/fecha")
-                .param("fecha", fecha.toString()))
-                .andExpect(status().isOk());
+    void testActualizarAforoMaximo() {
+        gestionEventoController.actualizarAforoMaximo(idEvento, aforoMaximo);
+        verify(gestionEventoServicio).actualizarAforoMaximo(idEvento, aforoMaximo);
     }
 
     @Test
-    void testAgregarEvaluacion() throws Exception{
-        Long idEvento = 1L;
-        String comentario = "Excelente evento";
-        int puntuacion = 5;
-        Long idParticipante = 1L;
-
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionEventoServicio).agregarEvaluacion(eq(idEvento), eq(comentario), eq(puntuacion), eq(idParticipante));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/eventos/1/evaluacion")
-                .param("comentario", comentario)
-                .param("puntuacion", "5")
-                .param("idParticipante", "1"))
-                .andExpect(status().isOk());
+    void testActualizarFecha() {
+        gestionEventoController.actualizarFecha(idEvento, fecha);
+        verify(gestionEventoServicio).actualizarFecha(idEvento, fecha);
     }
 
     @Test
-    void testAgregarParticipante() throws Exception{
-        Long idEvento = 1L;
-        Long idParticipante = 1L;
-
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionEventoServicio).agregarParticipante(eq(idEvento), eq(idParticipante));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/eventos/1/participante")
-                .param("idParticipante", "1"))
-                .andExpect(status().isOk());
+    void testAgregarEvaluacion() {
+        gestionEventoController.agregarEvaluacion(idEvento, comentario, puntuacion, idParticipante);
+        verify(gestionEventoServicio).agregarEvaluacion(idEvento, comentario, puntuacion, idParticipante);
     }
 
     @Test
-    void testEliminarParticipante() throws Exception{
-        Long idEvento = 1L;
-        Long idParticipante = 1L;
+    void testAgregarParticipante() {
+        gestionEventoController.agregarParticipante(idEvento, idParticipante);
+        verify(gestionEventoServicio).agregarParticipante(idEvento, idParticipante);
+    }
 
-        //Configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(gestionEventoServicio).eliminarParticipante(eq(idEvento), eq(idParticipante));
-
-        //Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/eventos/1/participante/eliminar")
-                .param("idParticipante", "1"))
-                .andExpect(status().isOk());
+    @Test
+    void testEliminarParticipante() {
+        gestionEventoController.eliminarParticipante(idEvento, idParticipante);
+        verify(gestionEventoServicio).eliminarParticipante(idEvento, idParticipante);
     }
 }

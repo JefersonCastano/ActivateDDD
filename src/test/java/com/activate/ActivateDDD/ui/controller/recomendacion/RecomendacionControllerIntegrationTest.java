@@ -6,55 +6,58 @@ import com.activate.ActivateDDD.domain.commons.Interes;
 import com.activate.ActivateDDD.domain.commons.TipoEvento;
 import com.activate.ActivateDDD.domain.commons.Ubicacion;
 import com.activate.ActivateDDD.domain.gestion_evento.modelo.EventoInfo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@WebMvcTest(RecomendacionController.class)
+@SpringBootTest
 class RecomendacionControllerIntegrationTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private RecomendacionController recomendacionController;
 
     @MockBean
     private RecomendacionServicio recomendacionServicio;
 
-    @Test
-    void testEmparejar() throws Exception {
-        // Datos de prueba
-        Long idUsuario = 1L;
-        HashSet<Interes> intereses = new HashSet<>();
-        intereses.add(Interes.DEPORTE);
-        Ubicacion ubicacion = new Ubicacion(40L, -3L);
+    private Long idUsuario;
+    private ArrayList<EventoInfo> eventos;
+    private LocalDateTime fecha;
+    private Ubicacion ubicacion;
+    private HashSet<Interes> intereses;
 
-        EventoInfo eventoInfo = new EventoInfo(
-                1L, 100, 120, "Evento Test", "Descripción Test",
-                LocalDateTime.now(), ubicacion, Estado.ABIERTO,
-                TipoEvento.PUBLICO, "Organizador Test", intereses
-        );
+    @BeforeEach
+    void setUp() {
+        idUsuario = 1L;
+        eventos = new ArrayList<>();
+        fecha = LocalDateTime.now();
+        ubicacion = new Ubicacion(40L, -3L);
+        intereses = new HashSet<>();
+        intereses.add(Interes.CINE);
+        intereses.add(Interes.MUSICA);
+        intereses.add(Interes.POLITICA);
 
-        ArrayList<EventoInfo> eventos = new ArrayList<>();
-        eventos.add(eventoInfo);
-
-        //configurar el mock para que no haga nada cuando se llame al servicio
-        doNothing().when(recomendacionServicio).emparejar(eq(idUsuario));
-
-        // Realizar la solicitud HTTP simulada y verificar que sea exitosa
-        mockMvc.perform(post("/recomendaciones")
-                .param("idUsuario", String.valueOf(idUsuario)))
-                .andExpect(status().isOk()
-        );
+        eventos.add(new EventoInfo(1L, 10, 60, "Evento1", "Descripcion", fecha, ubicacion, Estado.ABIERTO, TipoEvento.PUBLICO, "Juan", intereses));
     }
 
+    @Test
+    void testEmparejar() {
+        when(recomendacionServicio.emparejar(idUsuario)).thenReturn(eventos);
+
+        ArrayList<EventoInfo> resultado = recomendacionController.emparejar(idUsuario);
+
+        assertNotNull(resultado);
+        assertEquals(eventos, resultado);
+        verify(recomendacionServicio).emparejar(idUsuario);
+    }
 }

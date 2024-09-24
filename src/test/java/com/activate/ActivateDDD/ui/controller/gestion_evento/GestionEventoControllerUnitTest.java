@@ -33,10 +33,7 @@ class GestionEventoControllerUnitTest {
     void testActualizarEstado() {
         Long idEvento = 1L;
         Estado estado = Estado.ABIERTO;
-
-        //Llamada al método a probar
         gestionEventoController.actualizarEstado(idEvento, estado);
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(gestionEventoServicio).actualizarEstado(eq(idEvento), eq(estado));
     }
 
@@ -45,9 +42,8 @@ class GestionEventoControllerUnitTest {
         Long idEvento = 1L;
         TipoEvento tipo = TipoEvento.PUBLICO;
 
-        //Llamada al método a probar
         gestionEventoController.actualizarTipo(idEvento, tipo);
-        //Verificación de que el método de la capa de aplicación fue invocado
+
         verify(gestionEventoServicio).actualizarTipo(eq(idEvento), eq(tipo));
     }
 
@@ -56,9 +52,7 @@ class GestionEventoControllerUnitTest {
         Long idEvento = 1L;
         int aforoMaximo = 100;
 
-        //Llamada al método a probar
         gestionEventoController.actualizarAforoMaximo(idEvento, aforoMaximo);
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(gestionEventoServicio).actualizarAforoMaximo(eq(idEvento), eq(aforoMaximo));
     }
 
@@ -67,9 +61,7 @@ class GestionEventoControllerUnitTest {
         Long idEvento = 1L;
         LocalDateTime fecha = LocalDateTime.now();
 
-        //Llamada al método a probar
         gestionEventoController.actualizarFecha(idEvento, fecha);
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(gestionEventoServicio).actualizarFecha(eq(idEvento), eq(fecha));
     }
 
@@ -80,9 +72,7 @@ class GestionEventoControllerUnitTest {
         int puntuacion = 5;
         Long idParticipante = 1L;
 
-        //Llamada al método a probar
         gestionEventoController.agregarEvaluacion(idEvento, comentario, puntuacion, idParticipante);
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(gestionEventoServicio).agregarEvaluacion(eq(idEvento), eq(comentario), eq(puntuacion), eq(idParticipante));
     }
 
@@ -91,9 +81,7 @@ class GestionEventoControllerUnitTest {
         Long idEvento = 1L;
         Long idParticipante = 1L;
 
-        //Llamada al método a probar
         gestionEventoController.agregarParticipante(idEvento, idParticipante);
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(gestionEventoServicio).agregarParticipante(eq(idEvento), eq(idParticipante));
     }
 
@@ -102,9 +90,7 @@ class GestionEventoControllerUnitTest {
         Long idEvento = 1L;
         Long idParticipante = 1L;
 
-        //Llamada al método a probar
         gestionEventoController.eliminarParticipante(idEvento, idParticipante);
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(gestionEventoServicio).eliminarParticipante(eq(idEvento), eq(idParticipante));
     }
 }

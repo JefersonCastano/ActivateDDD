@@ -45,10 +45,7 @@ class OrganizadorControllerUnitTest {
         HashSet<Interes> intereses = new HashSet<>();
         intereses.add(Interes.VIDEOJUEGOS);
 
-        //Llamada al método a probar
         organizadorController.crearEvento(aforoMaximo, duracion, nombre, descripcion, fecha, latitud, longitud, tipo, idOrganizador, intereses);
-
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(organizadorServicio).crearEvento(eq(1L), eq(aforoMaximo), eq(duracion), eq(nombre), eq(descripcion), eq(fecha), any(Ubicacion.class), eq(tipo), eq(idOrganizador), eq(intereses));
     }
 
@@ -57,10 +54,7 @@ class OrganizadorControllerUnitTest {
         Long idEvento = 1L;
         Long idOrganizador = 1L;
 
-        //Llamada al método a probar
         organizadorController.cancelarEvento(idEvento, idOrganizador);
-
-        //Verificación de que el método de la capa de aplicación fue invocado
         verify(organizadorServicio).cancelarEvento(eq(idEvento), eq(idOrganizador));
     }
 }

@@ -38,7 +38,6 @@ class RecomendacionControllerUnitTest {
 
     @Test
     void testEmparejar() {
-        // Datos de prueba
         Long idUsuario = 1L;
         HashSet<Interes> intereses = new HashSet<>();
         intereses.add(Interes.DEPORTE);
@@ -55,16 +54,11 @@ class RecomendacionControllerUnitTest {
 
         // Simular el comportamiento del servicio
         when(recomendacionServicio.emparejar(idUsuario)).thenReturn(eventosEsperados);
-
-        // Llamar al método del controlador
         ArrayList<EventoInfo> eventosObtenidos = recomendacionController.emparejar(idUsuario);
 
-        // Verificaciones
         assertNotNull(eventosObtenidos);
         assertEquals(1, eventosObtenidos.size());
         assertEquals("Evento Test", eventosObtenidos.getFirst().getNombre());
-
-        // Verificar que el servicio fue invocado
         verify(recomendacionServicio).emparejar(idUsuario);
     }
 
