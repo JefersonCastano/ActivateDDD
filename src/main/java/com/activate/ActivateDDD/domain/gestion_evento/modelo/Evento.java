@@ -1,10 +1,8 @@
 package com.activate.ActivateDDD.domain.gestion_evento.modelo;
 
 import com.activate.ActivateDDD.domain.commons.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.aspectj.weaver.IClassFileProvider;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
