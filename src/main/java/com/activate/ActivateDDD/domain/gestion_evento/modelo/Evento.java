@@ -27,6 +27,7 @@ public class Evento {
     private Estado estado;
     @Getter
     private TipoEvento tipo;
+    @Getter
     private Organizador organizador;
     @Getter
     private HashSet<Interes> intereses;
