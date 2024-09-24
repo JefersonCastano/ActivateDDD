@@ -2,7 +2,7 @@ package com.activate.ActivateDDD.infrastructure.repository.gestion_evento.comman
 
 
 
-import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Interes;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Interes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,7 +42,7 @@ public class EventoCommand {
     @Column(name = "organizador_id")
     private Long organizador;
 
-    @ElementCollection(targetClass = Interes.class)
+    @ElementCollection(fetch = FetchType.EAGER, targetClass = Interes.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "evento_intereses", joinColumns = @JoinColumn(name = "evento_id"))
     @Column(name = "interes")

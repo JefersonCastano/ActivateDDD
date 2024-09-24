@@ -5,7 +5,7 @@ import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Participante;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.repository.EventoCommandRepository;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.sync.EventoSyncService;
-import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Interes;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Interes;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Usuario;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -52,6 +52,7 @@ public class ServicePrueba {
 
         System.out.println("SE OBTIENE EL EVENTO PRIMERA VEZ");
         Optional<EventoCommand> evento1 = eventoCommandRepository.findById(1l);
+
         System.out.println("SE OBTIENE EL PARTICIPANTE");
         Optional<Usuario> user2 = usuarioRepository.findById(2L);
 
@@ -68,6 +69,7 @@ public class ServicePrueba {
         Optional<EventoCommand> evento2 = eventoCommandRepository.findById(1l);
         System.out.println("SE BORRAN LOS PARTICIPANTES");
         evento2.get().getParticipantes().clear();
+        //evento2.get().getParticipantes().removeIf(p -> p.getId().equals(2l));
         System.out.println(evento2.get().getParticipantes());
         System.out.println("SE GUARDA EL EVENTO SIN PARTICIPANTES");
         eventoCommandRepository.save(evento2.get());
@@ -81,7 +83,7 @@ public class ServicePrueba {
         System.out.println("SE SINCRONIZA CON MONGO UNA ULTIMA VEZ");
         eventoSyncService.sync();
     }
-
+    @Transactional
     public void pruebaAddAndDeleteParticipante(){
 
         EventoCommand eventoCommand = new EventoCommand();

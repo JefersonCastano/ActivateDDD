@@ -73,7 +73,7 @@ public class EventoSyncService {
     }
 
     private List<Participante> getPaticipantes(List<com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Participante> participantesCommand){
-        return participantesCommand.stream().map(participanteCommand -> new Participante(participanteCommand.getId(), participanteCommand.getUsuario().getNombre())).collect(Collectors.toList());
+        return participantesCommand.stream().map(participanteCommand -> new Participante(participanteCommand.getId(), participanteCommand.getUsuario().getId(), participanteCommand.getUsuario().getNombre())).collect(Collectors.toList());
     }
 
     private List<Evaluacion> getEvaluaciones(List<com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Evaluacion> evaluacionesCommand){

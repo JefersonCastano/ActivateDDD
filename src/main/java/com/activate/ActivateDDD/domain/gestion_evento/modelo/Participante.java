@@ -1,12 +1,17 @@
 package com.activate.ActivateDDD.domain.gestion_evento.modelo;
 
 import com.activate.ActivateDDD.domain.gestion_usuario.modelo.Usuario;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
 public class Participante {
     private Long id;
+    @Getter
     private Usuario usuario;
+    @Setter
+    @Getter
     private ArrayList<EventoInfo> eventosParticipados;
 
     public Participante(Long id, Usuario usuario) {

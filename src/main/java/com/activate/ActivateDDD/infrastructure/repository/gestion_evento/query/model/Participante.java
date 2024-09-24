@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Participante {
     private Long id;
+    private Long idUsuario;
     private String nombre;
 }
