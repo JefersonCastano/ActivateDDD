@@ -4,6 +4,7 @@ import com.activate.ActivateDDD.domain.commons.Interes;
 import com.activate.ActivateDDD.domain.commons.Ubicacion;
 import com.activate.ActivateDDD.domain.gestion_evento.modelo.EventoInfo;
 import com.activate.ActivateDDD.domain.gestion_usuario.modelo.Usuario;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 public class Recomendacion {
 
     private static final int UMBRAL_CERCANIA = 50;
+    @Getter
     private HashMap<Long,ArrayList<EventoInfo>> emparejamientos;
 
     public Recomendacion() {

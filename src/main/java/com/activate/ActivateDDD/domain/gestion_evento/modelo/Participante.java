@@ -1,12 +1,16 @@
 package com.activate.ActivateDDD.domain.gestion_evento.modelo;
 
 import com.activate.ActivateDDD.domain.gestion_usuario.modelo.Usuario;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
 public class Participante {
+    @Getter
     private Long id;
+    @Getter
     private Usuario usuario;
+    @Getter
     private ArrayList<EventoInfo> eventosParticipados;
 
     public Participante(Long id, Usuario usuario) {
@@ -20,7 +24,7 @@ public class Participante {
             if (e.getFecha().equals(evento.getFecha())) {
                 return false;
             }
-            if(e.getFecha().isAfter(evento.getFecha()) && e.getFecha().isBefore(evento.getFecha().plusMinutes(evento.getDuracion()))) {
+            if (e.getFecha().isBefore(evento.getFecha().plusMinutes(evento.getDuracion())) && e.getFecha().plusMinutes(e.getDuracion()).isAfter(evento.getFecha())) {
                 return false;
             }
         }

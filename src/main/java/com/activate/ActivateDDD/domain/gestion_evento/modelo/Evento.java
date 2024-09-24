@@ -3,6 +3,7 @@ package com.activate.ActivateDDD.domain.gestion_evento.modelo;
 import com.activate.ActivateDDD.domain.commons.*;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.aspectj.weaver.IClassFileProvider;
 
 import java.time.LocalDateTime;
@@ -24,14 +25,16 @@ public class Evento {
     private LocalDateTime fecha;
     @Getter
     private Ubicacion ubicacion;
-    @Getter
+    @Getter @Setter
     private Estado estado;
     @Getter
     private TipoEvento tipo;
     private Organizador organizador;
     @Getter
     private HashSet<Interes> intereses;
+    @Getter
     private ArrayList<Participante> participantes;
+    @Getter
     private ArrayList<Evaluacion> evaluaciones;
 
     public Evento(Long id, int aforoMaximo, int duracion, String nombre, String descripcion, LocalDateTime fecha, Ubicacion ubicacion,TipoEvento tipo, Organizador organizador, HashSet<Interes> intereses) {

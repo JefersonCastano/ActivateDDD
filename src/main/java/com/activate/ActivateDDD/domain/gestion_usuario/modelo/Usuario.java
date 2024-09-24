@@ -36,7 +36,7 @@ public class Usuario {
         return true;
     }
 
-    private  boolean esEmailValido(String email){
+    private boolean esEmailValido(String email) {
         String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         Pattern pattern = Pattern.compile(EMAIL_PATTERN);
         if (email == null) {
