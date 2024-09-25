@@ -74,12 +74,12 @@ public class Evento {
             throw new RuntimeException("No se puede cancelar un evento que ya ha finalizado");
         this.estado = Estado.CANCELADO;
     }
-    private void cerrar() {
+    public void cerrar() {
         if(!this.estado.equals(Estado.ABIERTO))
             throw new RuntimeException("No se puede cerrar un evento que no está abierto");
         this.estado = Estado.CERRADO;
     }
-    private void reabrir() {
+    public void reabrir() {
         if(!this.estado.equals(Estado.CERRADO))
             throw new RuntimeException("No se puede reabrir un evento que no está cerrado");
         this.estado = Estado.ABIERTO;
