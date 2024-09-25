@@ -27,17 +27,9 @@ class ParticipanteControllerUnitTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testEstaDisponible() {
-        Long idEvento = 1L;
-        Long idParticipante = 1L;
-
-        participanteController.estaDisponible(idEvento, idParticipante);
-        verify(participanteServicio).estaDisponible(eq(idEvento), eq(idParticipante));
-    }
 
     @Test
-    void testObtenerEventosParticipante() {
+    void testObtenerEventosParticipante() throws Exception {
         Long idParticipante = 1L;
 
         participanteController.obtenerEventosParticipante(idParticipante);

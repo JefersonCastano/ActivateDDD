@@ -27,12 +27,11 @@ class OrganizadorIntegrationTest {
         Ubicacion ubicacion = new Ubicacion(10L, 20L);
 
         usuario = new Usuario(1L, "Juan", 25, "juan@gmail.com", intereses, ubicacion);
-
+        organizador = new Organizador(usuario);
         evento = new Evento(1L, 100, 120, "Evento de Prueba",
                 "Descripción del evento", LocalDateTime.now().plusDays(1),
                 ubicacion, TipoEvento.PUBLICO, organizador, intereses);
-
-        organizador = new Organizador(1L, usuario, evento);
+        organizador.crearEvento(evento);
     }
 
     @Test
@@ -49,7 +48,7 @@ class OrganizadorIntegrationTest {
     }
 
     @Test
-    void testCancelarEventoExistente() {
+    void testCancelarEventoExistente() throws Exception {
         boolean resultado = organizador.cancelarEvento(1L);
 
         assertTrue(resultado, "El evento debería ser cancelado exitosamente.");
@@ -58,9 +57,11 @@ class OrganizadorIntegrationTest {
 
     @Test
     void testCancelarEventoNoExistente() {
-        boolean resultado = organizador.cancelarEvento(2L);
+        Exception exception = assertThrows(Exception.class, () -> {
+            organizador.cancelarEvento(2L);
+        });
 
-        assertFalse(resultado, "El método debería retornar false cuando el evento no existe.");
+        assertEquals("No fue posible cancelar el evento. Evento no encontrado", exception.getMessage());
     }
 
     @Test

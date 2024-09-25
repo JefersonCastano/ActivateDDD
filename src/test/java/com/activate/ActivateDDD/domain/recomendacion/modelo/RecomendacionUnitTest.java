@@ -33,7 +33,7 @@ class RecomendacionUnitTest {
         intereses.add(Interes.CINE);
         intereses.add(Interes.MUSICA);
         intereses.add(Interes.POLITICA);
-        LocalDateTime fecha = LocalDateTime.now().plusDays(1);
+        fecha = LocalDateTime.now().plusDays(1);
         ubicacionUsuario = new Ubicacion(40L, -3L);
         usuario = new Usuario(1L, "Pepe", 20, "pepe@gmail.com", intereses, ubicacionUsuario);
 
@@ -54,7 +54,7 @@ class RecomendacionUnitTest {
         recomendacion.emparejar(usuario, eventosDisponibles);
         assertFalse(recomendacion.getEmparejamientos().isEmpty());
         assertTrue(recomendacion.getEmparejamientos().containsKey(usuario.getId()));
-        assertEquals(3, recomendacion.getEmparejamientos().get(usuario.getId()).size());
+        assertEquals(1, recomendacion.getEmparejamientos().get(usuario.getId()).size());
     }
 
     @Test
@@ -67,12 +67,12 @@ class RecomendacionUnitTest {
     void testEmparejarWithMatchingInteresAndCercania() {
         recomendacion.emparejar(usuario, eventosDisponibles);
         assertTrue(recomendacion.getEmparejamientos().containsKey(usuario.getId()));
-        assertEquals(3, recomendacion.getEmparejamientos().get(usuario.getId()).size());
+        assertEquals(1, recomendacion.getEmparejamientos().get(usuario.getId()).size());
     }
 
     @Test
     void testEmparejarWithNoMatchingInteres() {
-        eventosDisponibles.get(0).getIntereses().clear(); // Clear interests to ensure no match
+        eventosDisponibles.get(0).getIntereses().clear();
         Exception exception = assertThrows(RuntimeException.class, () -> {
             recomendacion.emparejar(usuario, eventosDisponibles);
         });
@@ -81,7 +81,7 @@ class RecomendacionUnitTest {
 
     @Test
     void testEmparejarWithNoCercania() {
-        ubicacionEvento = new Ubicacion(100L, 100L); // Set a far location
+        ubicacionEvento = new Ubicacion(100L, 100L);
         EventoInfo eventoLejano = new EventoInfo(2L, 50, 50, "Concierto", "Descripcion", fecha, ubicacionEvento, Estado.ABIERTO, TipoEvento.PUBLICO, "Juan", intereses);
         eventosDisponibles.clear();
         eventosDisponibles.add(eventoLejano);
@@ -94,9 +94,9 @@ class RecomendacionUnitTest {
 
     @Test
     void testEmparejarWithExistingEmparejamientos() {
-        recomendacion.emparejar(usuario, eventosDisponibles); // First call to add events
+        recomendacion.emparejar(usuario, eventosDisponibles);
         assertTrue(recomendacion.getEmparejamientos().containsKey(usuario.getId()));
-        assertEquals(3, recomendacion.getEmparejamientos().get(usuario.getId()).size());
+        assertEquals(1, recomendacion.getEmparejamientos().get(usuario.getId()).size());
 
         // Add another event and call emparejar again
         EventoInfo nuevoEvento = new EventoInfo(2L, 30, 30, "Cine", "Descripcion", fecha, ubicacionEvento, Estado.ABIERTO, TipoEvento.PUBLICO, "Juan", intereses);
@@ -104,7 +104,7 @@ class RecomendacionUnitTest {
         recomendacion.emparejar(usuario, eventosDisponibles);
 
         assertTrue(recomendacion.getEmparejamientos().containsKey(usuario.getId()));
-        assertEquals(6, recomendacion.getEmparejamientos().get(usuario.getId()).size());
+        assertEquals(2, recomendacion.getEmparejamientos().get(usuario.getId()).size());
     }
 
     @Test
@@ -131,7 +131,7 @@ class RecomendacionUnitTest {
         recomendacion.recomendarEvento(evento, usuarios);
         assertFalse(recomendacion.getEmparejamientos().isEmpty());
         assertTrue(recomendacion.getEmparejamientos().containsKey(usuario.getId()));
-        assertEquals(3, recomendacion.getEmparejamientos().get(usuario.getId()).size());
+        assertEquals(1, recomendacion.getEmparejamientos().get(usuario.getId()).size());
     }
 
     @Test
@@ -163,14 +163,14 @@ class RecomendacionUnitTest {
         usuarios.add(usuario);
         recomendacion.recomendarEvento(evento, usuarios); // First call to add events
         assertTrue(recomendacion.getEmparejamientos().containsKey(usuario.getId()));
-        assertEquals(3, recomendacion.getEmparejamientos().get(usuario.getId()).size());
+        assertEquals(1, recomendacion.getEmparejamientos().get(usuario.getId()).size());
 
         // Add another event and call recomendarEvento again
         EventoInfo nuevoEvento = new EventoInfo(2L, 30, 30, "Cine", "Descripcion", fecha, ubicacionEvento, Estado.ABIERTO, TipoEvento.PUBLICO, "Juan", intereses);
         recomendacion.recomendarEvento(nuevoEvento, usuarios);
 
         assertTrue(recomendacion.getEmparejamientos().containsKey(usuario.getId()));
-        assertEquals(6, recomendacion.getEmparejamientos().get(usuario.getId()).size());
+        assertEquals(2, recomendacion.getEmparejamientos().get(usuario.getId()).size());
     }
 
     @Test

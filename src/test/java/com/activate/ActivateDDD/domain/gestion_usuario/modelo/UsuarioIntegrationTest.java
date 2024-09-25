@@ -49,7 +49,7 @@ class UsuarioIntegrationTest {
     }
 
     @Test
-    void testAgregarInteres() {
+    void testAgregarInteres() throws Exception {
         boolean result = usuario.agregarInteres(Interes.TECNOLOGIA);
         assertTrue(result);
         assertTrue(usuario.getIntereses().contains(Interes.TECNOLOGIA));

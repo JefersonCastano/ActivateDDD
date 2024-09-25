@@ -32,7 +32,7 @@ class OrganizadorControllerUnitTest {
     }
 
     @Test
-    void testCrearEvento() {
+    void testCrearEvento() throws Exception {
         int aforoMaximo = 100;
         int duracion = 2;
         String nombre = "Evento";
@@ -46,11 +46,11 @@ class OrganizadorControllerUnitTest {
         intereses.add(Interes.VIDEOJUEGOS);
 
         organizadorController.crearEvento(aforoMaximo, duracion, nombre, descripcion, fecha, latitud, longitud, tipo, idOrganizador, intereses);
-        verify(organizadorServicio).crearEvento(eq(1L), eq(aforoMaximo), eq(duracion), eq(nombre), eq(descripcion), eq(fecha), any(Ubicacion.class), eq(tipo), eq(idOrganizador), eq(intereses));
+        verify(organizadorServicio).crearEvento( eq(aforoMaximo), eq(duracion), eq(nombre), eq(descripcion), eq(fecha), any(Ubicacion.class), eq(tipo), eq(idOrganizador), eq(intereses));
     }
 
     @Test
-    void testCancelarEvento() {
+    void testCancelarEvento() throws Exception {
         Long idEvento = 1L;
         Long idOrganizador = 1L;
 

@@ -112,7 +112,7 @@ class UsuarioUnitTest {
     }
 
     @Test
-    void testAgregarInteres() {
+    void testAgregarInteres() throws Exception {
         assertTrue(usuario.agregarInteres(Interes.TECNOLOGIA));
         assertTrue(usuario.getIntereses().contains(Interes.TECNOLOGIA));
     }

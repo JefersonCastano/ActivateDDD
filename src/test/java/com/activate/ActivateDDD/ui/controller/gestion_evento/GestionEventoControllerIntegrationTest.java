@@ -50,43 +50,37 @@ class GestionEventoControllerIntegrationTest {
     }
 
     @Test
-    void testActualizarEstado() {
-        gestionEventoController.actualizarEstado(idEvento, estado);
-        verify(gestionEventoServicio).actualizarEstado(idEvento, estado);
+    void testActualizarTipo() throws Exception {
+        gestionEventoController.actualizarTipo(idEvento);
+        verify(gestionEventoServicio).actualizarTipo(idEvento);
     }
 
     @Test
-    void testActualizarTipo() {
-        gestionEventoController.actualizarTipo(idEvento, tipo);
-        verify(gestionEventoServicio).actualizarTipo(idEvento, tipo);
-    }
-
-    @Test
-    void testActualizarAforoMaximo() {
+    void testActualizarAforoMaximo() throws Exception {
         gestionEventoController.actualizarAforoMaximo(idEvento, aforoMaximo);
         verify(gestionEventoServicio).actualizarAforoMaximo(idEvento, aforoMaximo);
     }
 
     @Test
-    void testActualizarFecha() {
+    void testActualizarFecha() throws Exception {
         gestionEventoController.actualizarFecha(idEvento, fecha);
         verify(gestionEventoServicio).actualizarFecha(idEvento, fecha);
     }
 
     @Test
-    void testAgregarEvaluacion() {
+    void testAgregarEvaluacion() throws Exception {
         gestionEventoController.agregarEvaluacion(idEvento, comentario, puntuacion, idParticipante);
         verify(gestionEventoServicio).agregarEvaluacion(idEvento, comentario, puntuacion, idParticipante);
     }
 
     @Test
-    void testAgregarParticipante() {
+    void testAgregarParticipante() throws Exception {
         gestionEventoController.agregarParticipante(idEvento, idParticipante);
         verify(gestionEventoServicio).agregarParticipante(idEvento, idParticipante);
     }
 
     @Test
-    void testEliminarParticipante() {
+    void testEliminarParticipante() throws Exception {
         gestionEventoController.eliminarParticipante(idEvento, idParticipante);
         verify(gestionEventoServicio).eliminarParticipante(idEvento, idParticipante);
     }

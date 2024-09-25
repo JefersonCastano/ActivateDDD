@@ -28,6 +28,7 @@ class RecomendacionIntegrationTest {
         HashSet<Interes> intereses = new HashSet<>();
         intereses.add(Interes.CINE);
         intereses.add(Interes.MUSICA);
+        intereses.add(Interes.ARTE);
         Ubicacion ubicacion = new Ubicacion(10L, 20L);
 
         usuario = new Usuario(1L, "Juan", 25, "juan@gmail.com", intereses, ubicacion);

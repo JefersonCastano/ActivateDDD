@@ -1,5 +1,6 @@
 package com.activate.ActivateDDD.domain.gestion_evento.servicio;
 
+import com.activate.ActivateDDD.application.service.gestion_evento.GestionEventoServicio;
 import com.activate.ActivateDDD.domain.commons.Estado;
 import com.activate.ActivateDDD.domain.commons.Interes;
 import com.activate.ActivateDDD.domain.commons.TipoEvento;
@@ -26,6 +27,9 @@ class EventoServicioDominioUnitTest {
 
     @InjectMocks
     private EventoServicioDominio eventoServicioDominio;
+
+    @InjectMocks
+    private GestionEventoServicio gestionEventoServicio;
 
     @Mock
     private Evento evento;
@@ -80,16 +84,6 @@ class EventoServicioDominioUnitTest {
 
         verify(participante).estaDisponible(any(EventoInfo.class));
         verify(evento, never()).agregarParticipante(participante);
-    }
-
-    @Test
-    void eliminarParticipante() {
-        when(evento.eliminarParticipante(participante)).thenReturn(true);
-
-        boolean result = eventoServicioDominio.eliminarParticipante(evento, participante);
-
-        assertTrue(result);
-        verify(evento).eliminarParticipante(participante);
     }
 
     @Test

@@ -45,6 +45,8 @@ class GestionUsuarioControllerIntegrationTest {
         email = "juan@gmail.com";
         intereses = new HashSet<>();
         intereses.add(Interes.MUSICA);
+        intereses.add(Interes.ARTE);
+        intereses.add(Interes.TECNOLOGIA);
         latitud = 40L;
         longitud = -3L;
         id = 1L;
@@ -60,8 +62,9 @@ class GestionUsuarioControllerIntegrationTest {
         verify(gestionUsuarioServicio).crearUsuario(nombre, edad, email, intereses, ubicacion);
     }
 
+
     @Test
-    void testObtenerUsuario() {
+    void testObtenerUsuario() throws Exception {
         when(gestionUsuarioServicio.obtenerUsuario(id)).thenReturn(usuario);
         Usuario result = gestionUsuarioController.obtenerUsuario(id);
         assertNotNull(result);
@@ -70,7 +73,7 @@ class GestionUsuarioControllerIntegrationTest {
     }
 
     @Test
-    void testObtenerUsuarios() {
+    void testObtenerUsuarios() throws Exception {
         when(gestionUsuarioServicio.obtenerUsuarios()).thenReturn(usuarios);
         ArrayList<Usuario> result = gestionUsuarioController.obtenerUsuarios();
         assertNotNull(result);
@@ -85,7 +88,7 @@ class GestionUsuarioControllerIntegrationTest {
     }
 
     @Test
-    void testAgregarInteres() {
+    void testAgregarInteres() throws Exception {
         gestionUsuarioController.agregarInteres(id, Interes.MUSICA);
         verify(gestionUsuarioServicio).agregarInteres(id, Interes.MUSICA);
     }
@@ -97,7 +100,7 @@ class GestionUsuarioControllerIntegrationTest {
     }
 
     @Test
-    void testEliminarInteres() {
+    void testEliminarInteres() throws Exception {
         gestionUsuarioController.eliminarInteres(id, Interes.MUSICA);
         verify(gestionUsuarioServicio).eliminarInteres(id, Interes.MUSICA);
     }

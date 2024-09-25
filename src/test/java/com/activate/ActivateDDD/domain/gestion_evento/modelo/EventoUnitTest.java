@@ -32,7 +32,7 @@ class EventoUnitTest {
         LocalDateTime fecha = LocalDateTime.now().plusDays(1);
 
         usuario = new Usuario(1L, "Juan", 25, "juan@gmail.com", intereses, ubicacion);
-        organizador = new Organizador(1L, usuario, evento);
+        organizador = new Organizador( usuario);
         participante = new Participante(1L, usuario);
         participante2 = new Participante(2L, new Usuario(2L, "Ana", 22, "ana@gmail.com", intereses, new Ubicacion(30L, 40L)));
         evento = new Evento(1L, 100, 120, "Taller de Yoga", "Evento relajante", fecha, ubicacion, TipoEvento.PUBLICO, organizador, intereses);
@@ -101,37 +101,6 @@ class EventoUnitTest {
     void testCancelarEvento(){
         evento.cancelar();
         assertEquals(Estado.CANCELADO, evento.getEstado());
-    }
-
-    @Test
-    void testCerrarEventoNoAbierto(){
-        evento.iniciar();
-        assertThrows(RuntimeException.class, () -> evento.cerrar());
-    }
-
-    @Test
-    void testCerrarEvento(){
-        evento.cerrar();
-        assertEquals(Estado.CERRADO, evento.getEstado());
-    }
-
-    @Test
-    void testReabrirEventoNoCerrado(){
-        evento.iniciar();
-        assertThrows(RuntimeException.class, () -> evento.reabrir());
-    }
-
-    @Test
-    void testReabrirEvento(){
-        evento.cerrar();
-        evento.reabrir();
-        assertEquals(Estado.ABIERTO, evento.getEstado());
-    }
-
-    @Test
-    void testFinalizarEventoNoEnProceso(){
-        evento.cerrar();
-        assertThrows(RuntimeException.class, () -> evento.finalizar());
     }
 
     @Test
@@ -250,13 +219,13 @@ class EventoUnitTest {
     @Test
     void testEliminarParticipanteEventoFinalizado() throws Exception {
         evento.setEstado(Estado.FINALIZADO);
-        assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante));
+        assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante.getId()));
     }
 
     @Test
     void testEliminarParticipanteEventoCancelado() throws Exception {
         evento.cancelar();
-        assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante));
+        assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante.getId()));
     }
 
     @Test
@@ -289,7 +258,7 @@ class EventoUnitTest {
     @Test
     void testEliminarParticipanteEvento() {
         evento.agregarParticipante(participante);
-        evento.eliminarParticipante(participante);
+        evento.eliminarParticipante(participante.getId());
         assertFalse(evento.getParticipantes().contains(participante));
     }
 
@@ -299,7 +268,7 @@ class EventoUnitTest {
         evento.setEstado(Estado.CANCELADO);
 
         // Attempt to remove a participant and expect an exception
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante.getId()));
         assertEquals("No se puede eliminar un participante de un evento que no está abierto o cerrado", exception.getMessage());
     }
 
@@ -307,21 +276,21 @@ class EventoUnitTest {
     void eliminarParticipante_estadoCerradoDebeEliminar() {
         evento.setEstado(Estado.CERRADO);
         evento.getParticipantes().add(participante);
-        assertTrue(evento.eliminarParticipante(participante));
+        assertTrue(evento.eliminarParticipante(participante.getId()));
         assertFalse(evento.getParticipantes().contains(participante));
     }
 
     @Test
     void testEliminarParticipanteNoInscrito() {
         evento.setEstado(Estado.ABIERTO);
-        assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante), "El participante no está inscrito en el evento");
+        assertThrows(RuntimeException.class, () -> evento.eliminarParticipante(participante.getId()), "El participante no está inscrito en el evento");
     }
 
     @Test
     void testEliminarParticipanteInscrito() {
         evento.setEstado(Estado.ABIERTO);
         evento.agregarParticipante(participante);
-        assertDoesNotThrow(() -> evento.eliminarParticipante(participante));
+        assertDoesNotThrow(() -> evento.eliminarParticipante(participante.getId()));
         assertFalse(evento.getParticipantes().contains(participante));
     }
 

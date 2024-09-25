@@ -59,13 +59,13 @@ class OrganizadorControllerIntegrationTest {
     }
 
     @Test
-    void testCrearEvento() {
+    void testCrearEvento() throws Exception {
         organizadorController.crearEvento(aforoMaximo, duracion, nombre, descripcion, fecha, latitud, longitud, tipo, idOrganizador, intereses);
-        verify(organizadorServicio).crearEvento(anyLong(), eq(aforoMaximo), eq(duracion), eq(nombre), eq(descripcion), eq(fecha), any(Ubicacion.class), eq(tipo), eq(idOrganizador), eq(intereses));
+        verify(organizadorServicio).crearEvento(eq(aforoMaximo), eq(duracion), eq(nombre), eq(descripcion), eq(fecha), any(Ubicacion.class), eq(tipo), eq(idOrganizador), eq(intereses));
     }
 
     @Test
-    void testCancelarEvento() {
+    void testCancelarEvento() throws Exception {
         organizadorController.cancelarEvento(idEvento, idOrganizador);
         verify(organizadorServicio).cancelarEvento(eq(idEvento), eq(idOrganizador));
     }

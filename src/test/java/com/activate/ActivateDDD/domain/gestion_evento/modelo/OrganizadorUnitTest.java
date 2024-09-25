@@ -28,12 +28,11 @@ class OrganizadorUnitTest {
         Ubicacion ubicacion = new Ubicacion(10L, 20L);
 
         usuario = new Usuario(1L, "Juan", 25, "juan@gmail.com", intereses, ubicacion);
-
+        organizador = new Organizador(usuario);
         evento = new Evento(1L, 100, 120, "Evento de Prueba",
                 "Descripción del evento", LocalDateTime.now().plusDays(1),
-                ubicacion, TipoEvento.PUBLICO, null, intereses);
-
-        organizador = new Organizador(1L, usuario, evento);
+                ubicacion, TipoEvento.PUBLICO, organizador, intereses);
+        organizador.crearEvento(evento);
     }
 
     @Test
@@ -53,7 +52,7 @@ class OrganizadorUnitTest {
     }
 
     @Test
-    void testCancelarEventoExistente() {
+    void testCancelarEventoExistente() throws Exception {
         // Act
         boolean resultado = organizador.cancelarEvento(1L);
 
@@ -63,10 +62,13 @@ class OrganizadorUnitTest {
     }
 
     @Test
-    void testCancelarEventoNoExistente() {
-        boolean resultado = organizador.cancelarEvento(2L);
+    void testCancelarEventoNoExistente() throws Exception {
 
-        assertFalse(resultado, "El método debería retornar false cuando el evento no existe.");
+        Exception exception = assertThrows(Exception.class, () -> {
+            organizador.cancelarEvento(2L);
+        });
+
+        assertEquals("No fue posible cancelar el evento. Evento no encontrado", exception.getMessage());
     }
 
     @Test

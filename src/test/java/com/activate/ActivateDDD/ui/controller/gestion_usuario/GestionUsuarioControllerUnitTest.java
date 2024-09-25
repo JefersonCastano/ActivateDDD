@@ -43,6 +43,8 @@ class GestionUsuarioControllerUnitTest {
         String email = "juan@gmail.com";
         HashSet<Interes> intereses = new HashSet<>();
         intereses.add(Interes.MUSICA);
+        intereses.add(Interes.ARTE);
+        intereses.add(Interes.DEPORTE);
         Long latitud = 40L;
         Long longitud = -3L;
 
@@ -107,7 +109,7 @@ class GestionUsuarioControllerUnitTest {
     }
 
     @Test
-    void testAgregarInteres() {
+    void testAgregarInteres() throws Exception {
         Long id = 1L;
         Interes interes = Interes.MUSICA;
 
@@ -125,7 +127,7 @@ class GestionUsuarioControllerUnitTest {
     }
 
     @Test
-    void eliminarInteres() {
+    void eliminarInteres() throws Exception {
         Long id = 1L;
         Interes interes = Interes.MUSICA;
 

@@ -29,26 +29,19 @@ class GestionEventoControllerUnitTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testActualizarEstado() {
-        Long idEvento = 1L;
-        Estado estado = Estado.ABIERTO;
-        gestionEventoController.actualizarEstado(idEvento, estado);
-        verify(gestionEventoServicio).actualizarEstado(eq(idEvento), eq(estado));
-    }
 
     @Test
-    void testActualizarTipo() {
+    void testActualizarTipo() throws Exception {
         Long idEvento = 1L;
         TipoEvento tipo = TipoEvento.PUBLICO;
 
-        gestionEventoController.actualizarTipo(idEvento, tipo);
+        gestionEventoController.actualizarTipo(idEvento);
 
-        verify(gestionEventoServicio).actualizarTipo(eq(idEvento), eq(tipo));
+        verify(gestionEventoServicio).actualizarTipo(eq(idEvento));
     }
 
     @Test
-    void testActualizarAforoMaximo() {
+    void testActualizarAforoMaximo() throws Exception {
         Long idEvento = 1L;
         int aforoMaximo = 100;
 
@@ -57,7 +50,7 @@ class GestionEventoControllerUnitTest {
     }
 
     @Test
-    void testActualizarFecha() {
+    void testActualizarFecha() throws Exception {
         Long idEvento = 1L;
         LocalDateTime fecha = LocalDateTime.now();
 
@@ -66,7 +59,7 @@ class GestionEventoControllerUnitTest {
     }
 
     @Test
-    void testAgregarEvaluacion() {
+    void testAgregarEvaluacion() throws Exception {
         Long idEvento = 1L;
         String comentario = "Excelente evento";
         int puntuacion = 5;
@@ -77,7 +70,7 @@ class GestionEventoControllerUnitTest {
     }
 
     @Test
-    void testAgregarParticipante() {
+    void testAgregarParticipante() throws Exception {
         Long idEvento = 1L;
         Long idParticipante = 1L;
 
@@ -86,7 +79,7 @@ class GestionEventoControllerUnitTest {
     }
 
     @Test
-    void testEliminarParticipante() {
+    void testEliminarParticipante() throws Exception {
         Long idEvento = 1L;
         Long idParticipante = 1L;
 

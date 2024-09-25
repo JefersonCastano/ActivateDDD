@@ -51,7 +51,7 @@ class RecomendacionControllerIntegrationTest {
     }
 
     @Test
-    void testEmparejar() {
+    void testEmparejar() throws Exception {
         when(recomendacionServicio.emparejar(idUsuario)).thenReturn(eventos);
 
         ArrayList<EventoInfo> resultado = recomendacionController.emparejar(idUsuario);

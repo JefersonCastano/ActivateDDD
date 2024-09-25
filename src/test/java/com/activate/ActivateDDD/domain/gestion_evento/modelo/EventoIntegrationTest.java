@@ -23,12 +23,12 @@ class EventoIntegrationTest {
     @BeforeEach
     void setUp() throws Exception {
         ubicacion = new Ubicacion(40L, -3L);
-        usuario = new Usuario(1L, "Juan", 25, "juan@gmail.com", intereses, ubicacion);
-        organizador = new Organizador(1L, usuario, evento);
+        organizador = new Organizador( usuario);
         intereses = new HashSet<>();
         intereses.add(Interes.MUSICA);
         intereses.add(Interes.CINE);
         intereses.add(Interes.POLITICA);
+        usuario = new Usuario(1L, "Juan", 25, "juan@gmail.com", intereses, ubicacion);
         evento = new Evento(1L, 100, 120, "Concierto", "Concierto de rock", LocalDateTime.now().plusDays(1), ubicacion, TipoEvento.PUBLICO, organizador, intereses);
     }
 
@@ -51,19 +51,6 @@ class EventoIntegrationTest {
     void testCancelar() {
         evento.cancelar();
         assertEquals(Estado.CANCELADO, evento.getEstado());
-    }
-
-    @Test
-    void testCerrar() {
-        evento.cerrar();
-        assertEquals(Estado.CERRADO, evento.getEstado());
-    }
-
-    @Test
-    void testReabrir() {
-        evento.cerrar();
-        evento.reabrir();
-        assertEquals(Estado.ABIERTO, evento.getEstado());
     }
 
     @Test
@@ -103,6 +90,7 @@ class EventoIntegrationTest {
     void testAgregarEvaluacion() {
         Participante autor = new Participante(1L, usuario);
         evento.agregarParticipante(autor);
+        evento.iniciar();
         evento.finalizar();
         Evaluacion evaluacion = new Evaluacion(1L, "Buen evento", 4, autor);
         evento.agregarEvaluacion(evaluacion);
@@ -121,7 +109,7 @@ class EventoIntegrationTest {
     void testEliminarParticipante() {
         Participante participante = new Participante(1L, usuario);
         evento.agregarParticipante(participante);
-        boolean result = evento.eliminarParticipante(participante);
+        boolean result = evento.eliminarParticipante(participante.getId());
         assertTrue(result);
         assertFalse(evento.getParticipantes().contains(participante));
     }

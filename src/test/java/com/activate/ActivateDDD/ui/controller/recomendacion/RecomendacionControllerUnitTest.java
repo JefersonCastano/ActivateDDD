@@ -37,7 +37,7 @@ class RecomendacionControllerUnitTest {
     }
 
     @Test
-    void testEmparejar() {
+    void testEmparejar() throws Exception {
         Long idUsuario = 1L;
         HashSet<Interes> intereses = new HashSet<>();
         intereses.add(Interes.DEPORTE);
