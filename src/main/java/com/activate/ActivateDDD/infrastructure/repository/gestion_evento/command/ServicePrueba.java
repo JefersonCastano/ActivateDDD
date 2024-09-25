@@ -68,9 +68,12 @@ public class ServicePrueba {
         System.out.println("SE OBTIENE EL EVENTO SEGUNDA VEZ");
         Optional<EventoCommand> evento2 = eventoCommandRepository.findById(1l);
         System.out.println("SE BORRAN LOS PARTICIPANTES");
-        evento2.get().getParticipantes().clear();
+        //evento2.get().getParticipantes().clear();
+
         //evento2.get().getParticipantes().removeIf(p -> p.getId().equals(2l));
-        System.out.println(evento2.get().getParticipantes());
+        //participante.setEvento(null);
+        eventoCommandRepository.eliminarParticipanteDeEvento(1l, 2l);
+
         System.out.println("SE GUARDA EL EVENTO SIN PARTICIPANTES");
         eventoCommandRepository.save(evento2.get());
 

@@ -1,10 +1,7 @@
 package com.activate.ActivateDDD.ui.controller.gestion_evento;
 
 import com.activate.ActivateDDD.application.service.gestion_evento.GestionEventoServicio;
-import com.activate.ActivateDDD.domain.commons.Estado;
-import com.activate.ActivateDDD.domain.commons.TipoEvento;
-import com.activate.ActivateDDD.domain.gestion_evento.modelo.Evaluacion;
-import com.activate.ActivateDDD.domain.gestion_evento.modelo.Evento;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Evento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +16,7 @@ public class GestionEventoController {
     @Autowired
     private GestionEventoServicio gestionEventoServicio;
 
-    public Evento obtenerEvento(Long idEvento) throws Exception {
+    public com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Evento obtenerEvento(Long idEvento) throws Exception {
         return gestionEventoServicio.obtenerEvento(idEvento);
     }
 
@@ -50,4 +47,13 @@ public class GestionEventoController {
     public void eliminarParticipante(Long idEvento, Long idParticipante) throws Exception {
         gestionEventoServicio.eliminarParticipante(idEvento, idParticipante);
     }
+
+    public void iniciarEvento(Long idEvento) throws Exception {
+        gestionEventoServicio.iniciarEvento(idEvento);
+    }
+
+    public void finalizarEvento(Long idEvento) throws Exception {
+        gestionEventoServicio.finalizarEvento(idEvento);
+    }
+
 }

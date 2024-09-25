@@ -16,18 +16,13 @@ public class EventoServicioDominio {
 
     public boolean agregarParticipante(Evento evento, Participante participante){
         EventoInfo e = convertirEventoAInfo(evento);
-        //TODO: Poner verificación
-        //if(!participante.estaDisponible(e))
-        //    throw new RuntimeException("El participante ya está inscrito en un evento en la misma fecha y hora: "+e.getFecha().toString());
+        if(!participante.estaDisponible(e))
+            throw new RuntimeException("El participante ya está inscrito en un evento en la misma fecha y hora: "+e.getFecha().toString());
         if (evento.agregarParticipante(participante)){
             participante.getEventosParticipados().add(e);
             return true;
         }
         return false;
-    }
-
-    public boolean eliminarParticipante(Evento evento,Long idParticipante){
-        return evento.eliminarParticipante(idParticipante);
     }
 
     public EventoInfo convertirEventoAInfo(Evento evento){

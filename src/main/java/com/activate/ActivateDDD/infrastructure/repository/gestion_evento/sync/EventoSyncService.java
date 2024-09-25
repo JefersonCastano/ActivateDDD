@@ -3,6 +3,7 @@ package com.activate.ActivateDDD.infrastructure.repository.gestion_evento.sync;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.EventoCommand;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.repository.EventoCommandRepository;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.*;
+import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.model.Usuario;
 import com.activate.ActivateDDD.infrastructure.repository.gestion_usuario.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,77 +79,16 @@ public class EventoSyncService {
 
     private List<Evaluacion> getEvaluaciones(List<com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Evaluacion> evaluacionesCommand){
         return evaluacionesCommand.stream()
-                .map(evaluacionCommand ->
-                        new Evaluacion(evaluacionCommand.getId(),
-                                evaluacionCommand.getComentario(),
-                                evaluacionCommand.getPuntuacion(),
-                                usuarioRepository.findById(evaluacionCommand.getAutor()).get().getNombre()))
+                .map(evaluacionCommand -> {
+                    Usuario usuario = usuarioRepository.findById(evaluacionCommand.getAutor()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                    return new Evaluacion(
+                            evaluacionCommand.getId(),
+                            evaluacionCommand.getComentario(),
+                            evaluacionCommand.getPuntuacion(),
+                            usuario.getNombre(),
+                            usuario.getId()
+                    );
+                })
                 .collect(Collectors.toList());
     }
-/*
-    private void updateIntereses() {
-        List<InteresCommand> modifiedIntereses = InteresCommandRepository.findAllByLastModifiedDateAfter(lastSyncDate);
-
-        for(InteresCommand interes : modifiedIntereses) {
-            Query query = new Query(Criteria.where("id").is(Interes.getEventoId().toString()));
-            Update update = new Update();
-
-            Interes mongoInteres = Interes.valueOf(interes.getInteres());
-
-            update.addToSet("intereses", mongoInteres);
-
-            mongoOps.findAndModify(query, update, FindAndModifyOptions.options().returnNew(true).upsert(true), Evento.class);
-        }
-    }
-
-    private void updateParticipantes() {
-        List<ParticipanteCommand> modifiedParticipantes = participanteCommandRepository.findAllByLastModifiedDateAfter(lastSyncDate);
-
-        for(ParticipanteCommand participante : modifiedParticipantes) {
-            Query query = new Query(Criteria.where("id").is(participante.getEventoId().toString()));
-            Update update = new Update();
-
-            Participante mongoParticipante = new Participante();
-            mongoParticipante.setId(participante.getId().toString());
-            mongoParticipante.setNombre(participante.getNombre());
-
-            update.addToSet("participantes", mongoParticipante);
-
-            mongoOps.findAndModify(query, update, FindAndModifyOptions.options().returnNew(true).upsert(true), Evento.class);
-        }
-    }
-
-    private void updateEvaluaciones() {
-        List<EvaluacionesCommand> modifiedEvaluaciones = evaluacionesCommandRepository.findAllByLastModifiedDateAfter(lastSyncDate);
-
-        for(EvaluacionesCommand evaluacion : modifiedEvaluaciones) {
-            Query query = new Query(Criteria.where("id").is(evaluacion.getEventoId().toString()));
-            Update update = new Update();
-
-            Evaluacion mongoEvaluacion = new Evaluacion();
-            mongoEvaluacion.setId(evaluacion.getId().toString());
-            mongoEvaluacion.setPuntuacion(evaluacion.getPuntuacion());
-            mongoEvaluacion.setComentario(evaluacion.getComentario());
-            mongoEvaluacion.setAutor(evaluacion.getAutor());
-
-            update.addToSet("evaluaciones", mongoEvaluacion);
-
-            mongoOps.findAndModify(query, update, FindAndModifyOptions.options().returnNew(true).upsert(true), Evento.class);
-        }
-    }
-    private void updateEvaluacione2s() {
-        List<ReactionCommand> modifiedReactions = reactionCommandRepository.findAllByLastModifiedDateAfter(lastSyncDate);
-
-        for(ReactionCommand reaction : modifiedReactions) {
-            Query query = new Query(new Criteria().andOperator(
-                    Criteria.where("id").is(reaction.getComment().getPostId().toString()),
-                    Criteria.where("comments").elemMatch(Criteria.where("id").is(reaction.getCommentId().toString()))
-            ));
-            Reaction mongoReaction = new Reaction();
-            mongoReaction.setId(reaction.getId().toString());
-            mongoReaction.setEmoji(reaction.getEmoji());
-            Update update = new Update().addToSet("comments.$.reactions", mongoReaction);
-            mongoOps.findAndModify(query, update, FindAndModifyOptions.options().upsert(true), Post.class);
-        }
-    }*/
 }

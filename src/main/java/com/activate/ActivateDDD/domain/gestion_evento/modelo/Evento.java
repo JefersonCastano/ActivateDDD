@@ -74,12 +74,12 @@ public class Evento {
             throw new RuntimeException("No se puede cancelar un evento que ya ha finalizado");
         this.estado = Estado.CANCELADO;
     }
-    public void cerrar() {
+    private void cerrar() {
         if(!this.estado.equals(Estado.ABIERTO))
             throw new RuntimeException("No se puede cerrar un evento que no está abierto");
         this.estado = Estado.CERRADO;
     }
-    public void reabrir() {
+    private void reabrir() {
         if(!this.estado.equals(Estado.CERRADO))
             throw new RuntimeException("No se puede reabrir un evento que no está cerrado");
         this.estado = Estado.ABIERTO;
@@ -148,7 +148,7 @@ public class Evento {
             throw new RuntimeException("El participante ya está inscrito en el evento");
         this.participantes.add(participante);
         if(this.participantes.size() == this.aforoMaximo)
-            this.estado = Estado.CERRADO;
+            cerrar();
         return true;
     }
 
@@ -159,6 +159,8 @@ public class Evento {
             throw new RuntimeException("El participante no está inscrito en el evento");
         }
         participantes.removeIf(p -> p.getUsuario().getId().equals(idParticipante));
+        if(this.estado.equals(Estado.CERRADO) && this.participantes.size() < this.aforoMaximo)
+            this.reabrir();
         return true;
     }
 

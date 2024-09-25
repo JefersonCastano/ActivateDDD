@@ -4,6 +4,7 @@ import com.activate.ActivateDDD.domain.gestion_usuario.modelo.Usuario;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 public class Participante {
@@ -22,12 +23,11 @@ public class Participante {
 
     public boolean estaDisponible(EventoInfo evento) {
         for (EventoInfo e : eventosParticipados) {
-            if (e.getFecha().equals(evento.getFecha())) {
-                return false;
-            }
-            if(e.getFecha().isAfter(evento.getFecha()) && e.getFecha().isBefore(evento.getFecha().plusMinutes(evento.getDuracion()))) {
-                return false;
-            }
+            if (e.getFecha().truncatedTo(ChronoUnit.MINUTES).equals(evento.getFecha().truncatedTo(ChronoUnit.MINUTES)))  return false;
+            if (e.getFecha().isAfter(evento.getFecha()) && e.getFecha().isBefore(evento.getFecha().plusMinutes(evento.getDuracion()))) return false;
+            if (evento.getFecha().isAfter(e.getFecha()) && evento.getFecha().isBefore(e.getFecha().plusMinutes(e.getDuracion()))) return false;
+
+
         }
         return true;
     }

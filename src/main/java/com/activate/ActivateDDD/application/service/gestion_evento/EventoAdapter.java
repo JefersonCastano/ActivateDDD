@@ -53,8 +53,8 @@ public class EventoAdapter {
         eventoMapped.setEstado(com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Estado.valueOf(evento.getEstado().toString()));
         eventoMapped.setOrganizador(evento.getIdOrganizador());
 
+        eventoMapped.getIntereses().clear();
         for (Interes interes : evento.getIntereses()) {
-            eventoMapped.getIntereses().clear();
             eventoMapped.getIntereses().add(com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Interes.valueOf(interes.toString()));
         }
 
@@ -62,9 +62,11 @@ public class EventoAdapter {
                 .noneMatch(ep -> ep.getUsuario().getId().equals(p.getUsuario().getId())));
         mapParticipantesToInfrastructure(evento.getParticipantes(), eventoMapped);
 
-        eventoMapped.getEvaluaciones().removeIf(e -> evento.getEvaluaciones().stream()
-                .noneMatch(ee -> ee.getId().equals(e.getId())));
         mapEvaluacionToInfraestructure( evento.getEvaluaciones(), eventoMapped);
+
+        eventoMapped.getEvaluaciones().forEach(e -> {
+            System.out.println("Evaluacion: " + e.getId() + " " + e.getComentario() + " " + e.getPuntuacion() + " " + e.getAutor());
+        });
 
         return eventoMapped;
     }
@@ -82,12 +84,9 @@ public class EventoAdapter {
 
     private void mapEvaluacionToInfraestructure(ArrayList<Evaluacion> evaluaciones, EventoCommand eventoCommand) {
         for (Evaluacion evaluacion : evaluaciones) {
-            if (eventoCommand.getEvaluaciones().stream().noneMatch(e -> e.getId().equals(evaluacion.getId()))) { //TODO: El id que esta entrando aqui es -1
-                Usuario usuarioAutor = usuarioRepository.findById(evaluacion.getAutor().getUsuario().getId()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
                 com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Evaluacion e =
-                        new com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Evaluacion(-1L,  evaluacion.getComentario(), evaluacion.getPuntuacion(), evaluacion.getAutor().getUsuario().getId(), eventoCommand);
+                        new com.activate.ActivateDDD.infrastructure.repository.gestion_evento.command.model.Evaluacion(null,  evaluacion.getComentario(), evaluacion.getPuntuacion(), evaluacion.getAutor().getUsuario().getId(), eventoCommand);
                 eventoCommand.getEvaluaciones().add(e);
-            }
         }
     }
 
@@ -118,7 +117,7 @@ public class EventoAdapter {
     private ArrayList<Evaluacion> mapEvaluacionToDomain(List<com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Evaluacion> evaluaciones) throws Exception {
         ArrayList<Evaluacion> evaluacionesMapped = new ArrayList<>();
         for (com.activate.ActivateDDD.infrastructure.repository.gestion_evento.query.model.Evaluacion evaluacion : evaluaciones) {
-            com.activate.ActivateDDD.domain.gestion_usuario.modelo.Usuario usuarioAutor = gestionUsuarioServicio.obtenerUsuario(Long.valueOf(evaluacion.getAutor()));
+            com.activate.ActivateDDD.domain.gestion_usuario.modelo.Usuario usuarioAutor = gestionUsuarioServicio.obtenerUsuario(evaluacion.getIdAutor());
             com.activate.ActivateDDD.domain.gestion_evento.modelo.Participante participanteAutor = new com.activate.ActivateDDD.domain.gestion_evento.modelo.Participante(null, usuarioAutor);
             Evaluacion e = new Evaluacion(evaluacion.getId(), evaluacion.getComentario(), evaluacion.getPuntuacion(), participanteAutor);
             evaluacionesMapped.add(e);

@@ -1,6 +1,7 @@
 package com.activate.ActivateDDD.application.service.gestion_evento;
 
 import com.activate.ActivateDDD.application.service.gestion_usuario.UsuarioAdapter;
+import com.activate.ActivateDDD.application.service.recomendacion.RecomendacionServicio;
 import com.activate.ActivateDDD.domain.commons.Interes;
 import com.activate.ActivateDDD.domain.commons.TipoEvento;
 import com.activate.ActivateDDD.domain.commons.Ubicacion;
@@ -50,7 +51,7 @@ public class OrganizadorServicio {
         Organizador organizador = new Organizador(usuarioAdapter.mapUsuarioToDomain(usuarioOrganizador));
 
         ArrayList<Evento> eventosOrganizados = new ArrayList<>();
-        for (Evento evento : gestionEventoServicio.obtenerEventos()) {
+        for (Evento evento : gestionEventoServicio.obtenerEventosDomain()) {
             if(evento.getIdOrganizador().equals(idOrganizador)) eventosOrganizados.add(evento);
         }
         organizador.setEventosOrganizados(eventosOrganizados);

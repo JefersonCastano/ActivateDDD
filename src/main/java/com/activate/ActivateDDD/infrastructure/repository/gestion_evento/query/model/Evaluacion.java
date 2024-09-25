@@ -12,4 +12,5 @@ public class Evaluacion {
     private String comentario;
     private int puntuacion;
     private String autor;
+    private Long idAutor;
 }
