@@ -13,8 +13,14 @@ public class RecomendacionController {
     @Autowired
     RecomendacionServicio recomendacionServicio;
 
-    public ArrayList<EventoInfo> emparejar(Long idUsuario) {
+    public ArrayList<EventoInfo> emparejar(Long idUsuario) throws Exception {
         return recomendacionServicio.emparejar(idUsuario);
+    }
+    public void recomendarEvento(Long idEvento) throws Exception {
+        recomendacionServicio.recomendarEvento(idEvento);
+    }
+    public ArrayList<EventoInfo> getRecomendaciones(Long idUsuario) {
+        return recomendacionServicio.getRecomendaciones(idUsuario);
     }
 
 }

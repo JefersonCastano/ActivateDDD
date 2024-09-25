@@ -13,11 +13,7 @@ public class ParticipanteController {
     @Autowired
     private ParticipanteServicio participanteServicio;
 
-    public boolean estaDisponible(Long idEvento, Long idParticipante) {
-        return participanteServicio.estaDisponible(idEvento, idParticipante);
-    }
-
-    public ArrayList<EventoInfo> obtenerEventosParticipante(Long idParticipante) {
+    public ArrayList<EventoInfo> obtenerEventosParticipante(Long idParticipante) throws Exception {
         return participanteServicio.obtenerEventosParticipante(idParticipante);
     }
 }

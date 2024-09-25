@@ -34,11 +34,11 @@ public class GestionUsuarioController {
         System.out.println("Usuario creado exitosamente.");
     }
 
-    public Usuario obtenerUsuario(Long id) {
+    public Usuario obtenerUsuario(Long id) throws Exception {
         return gestionUsuarioServicio.obtenerUsuario(id);
     }
 
-    public ArrayList<Usuario> obtenerUsuarios() {
+    public ArrayList<Usuario> obtenerUsuarios() throws Exception {
         return gestionUsuarioServicio.obtenerUsuarios();
     }
 
@@ -47,7 +47,7 @@ public class GestionUsuarioController {
         System.out.println("Perfil editado exitosamente.");
     }
 
-    public void agregarInteres(Long id, Interes interes) {
+    public void agregarInteres(Long id, Interes interes) throws Exception {
         gestionUsuarioServicio.agregarInteres(id, interes);
         System.out.println("Interes agregado exitosamente.");
     }
@@ -57,7 +57,7 @@ public class GestionUsuarioController {
         System.out.println("Ubicacion actualizada exitosamente.");
     }
 
-    public void eliminarInteres(Long id, Interes interes) {
+    public void eliminarInteres(Long id, Interes interes) throws Exception {
         gestionUsuarioServicio.eliminarInteres(id, interes);
         System.out.println("Interes eliminado exitosamente.");
     }
